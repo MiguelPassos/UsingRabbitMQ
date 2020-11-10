@@ -8,7 +8,8 @@ namespace Rabbit.Publisher
     {
         static void Main(string[] args)
         {
-            string message = string.Empty;
+            string message;
+
             do
             {
                 Console.WriteLine("--== Digite 'exit' para sair da aplicação ==--");
