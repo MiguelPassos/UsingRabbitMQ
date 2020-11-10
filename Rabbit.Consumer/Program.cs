@@ -9,7 +9,11 @@ namespace Rabbit.Consumer
     {
         static void Main(string[] args)
         {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
+            //Definindo a fila de onde as mensagens serão lidas.
+            var queue = "Teste";
+
+            //Definindo os parâmetros de conexão.
+            var factory = new ConnectionFactory() { HostName = "localhost", UserName = "guest", Password = "guest" };
 
             //Criando a conexão com o servidor.
             using (var connection = factory.CreateConnection())
@@ -17,7 +21,7 @@ namespace Rabbit.Consumer
                 //Criando a fila e a mensagem a ser publicada na fila.
                 using (var channel = connection.CreateModel())
                 {
-                    channel.QueueDeclare(queue: "Teste",
+                    channel.QueueDeclare(queue: queue,
                         durable: false,
                         exclusive: false,
                         autoDelete: false,
@@ -35,7 +39,7 @@ namespace Rabbit.Consumer
                         Console.WriteLine(message);
                     };
 
-                    channel.BasicConsume(queue: "Teste",
+                    channel.BasicConsume(queue: queue,
                         autoAck: true,
                         consumer: consumer);
 

@@ -27,7 +27,11 @@ namespace Rabbit.Publisher
 
         public static void SendMessage(string message)
         {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
+            //Definindo a fila a ser utilizada.
+            var queue = "Teste";
+
+            //Definindo os parâmetros de conexão.
+            var factory = new ConnectionFactory() { HostName = "localhost", UserName = "guest", Password = "guest" };
 
             //Criando a conexão com o servidor.
             using (var connection = factory.CreateConnection())
@@ -35,7 +39,7 @@ namespace Rabbit.Publisher
                 //Criando a fila e a mensagem a ser publicada na fila.
                 using (var channel = connection.CreateModel())
                 {
-                    channel.QueueDeclare(queue: "Teste",
+                    channel.QueueDeclare(queue: queue,
                         durable: false,
                         exclusive: false,
                         autoDelete: false,
@@ -44,9 +48,9 @@ namespace Rabbit.Publisher
                     //Transformando a mensagem em uma matriz de bytes.
                     var body = Encoding.UTF8.GetBytes(message);
 
-                    //Publicando a mensagem na fila "Teste".
+                    //Publicando a mensagem na fila.
                     channel.BasicPublish(exchange: "",
-                        routingKey: "Teste",
+                        routingKey: queue,
                         basicProperties: null,
                         body: body);                    
                 }
